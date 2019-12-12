@@ -1,0 +1,39 @@
+
+@{
+
+    List<object> toolbarItems = new List<object>();
+    toolbarItems.Add(new { text = "ftytfryfty", id = "fyfyf" });
+}
+<div>
+    <ejs-grid id="Grid" toolbar="toolbarItems" toolbarClick="toolbarClick" allowPaging="true">
+        <e-data-manager json="@ViewBag.datasource" adaptor="RemoteSaveAdaptor" insertUrl="/Home/Insert" updateUrl="/Home/Update" removeUrl="/Home/Delete"></e-data-manager>
+        <e-grid-editSettings allowDeleting="true" allowEditing="true" allowAdding="true" showDeleteConfirmDialog="true"></e-grid-editSettings>
+        <e-grid-pagesettings pageCount="5"></e-grid-pagesettings>
+        <e-grid-columns>
+            <e-grid-column field="OrderID" headerText="Order ID" isPrimaryKey="true" validationRules="@(new { required=true})" textAlign="Right" width="120"></e-grid-column>
+            <e-grid-column field="CustomerID" headerText="Customer Name" validationRules="@(new { required=true})" width="150"></e-grid-column>
+            <e-grid-column field="Freight" headerText="Freight" validationRules="@(new { required=true})" textAlign="Right" editType="numericedit" format="C2" width="120"></e-grid-column>
+            <e-grid-column field="ShipCity" headerText="Ship City" width="170"></e-grid-column>
+            <e-grid-column field="ShipCountry" headerText="Ship Country" width="150"></e-grid-column>
+        </e-grid-columns>
+    </ejs-grid>
+</div>
+<script>
+    function toolbarClick(args) {
+
+        debugger;
+        if (args.item.id === 'fyfyf') {
+            var grid = document.getElementsByClassName("e-grid")[0].ej2_instances[0]
+            var data1 = [{ OrderID: 1001,CustomerID: 'VINIT', Freight:3.2, ShipCity:'Berlin', ShipCountry:'Denmark' }, { OrderID: 1002,CustomerID: 'VINIT', Freight:3.2, ShipCity:'Berlin', ShipCountry:'Denmark' }, { OrderID: 1003,CustomerID: 'VINIT', Freight:3.2, ShipCity:'Berlin', ShipCountry:'Denmark' }]
+                        var ajax = new ej.base.Ajax();
+            ajax.data = JSON.stringify(data1);
+            ajax.url = "/Home/InsertArray";
+            ajax.type = "POST";
+            ajax.successHandler = function (e) {
+                grid.dataSource = new ej.data.DataManager({ json: JSON.parse(e), insertUrl:"/Home/Insert", updateUrl:"/Home/Update", removeUrl:"/Home/Delete", adaptor:new ej.data.RemoteSaveAdaptor})
+            };
+            ajax.send();
+           
+        }
+    }
+</script>
